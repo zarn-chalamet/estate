@@ -4,16 +4,16 @@
       <h1 class="register-title">Create an Account</h1>
       <form @submit.prevent="onRegister">
         <div class="input-group">
-          <input type="text" placeholder="Username" required />
+          <input type="text" placeholder="Username" v-model="username" required />
         </div>
         <div class="input-group">
-          <input type="email" placeholder="Email" required />
+          <input type="email" placeholder="Email" v-model="email" />
         </div>
         <div class="input-group">
-          <input type="password" placeholder="Password" required />
+          <input type="password" placeholder="Password" v-model="password" />
         </div>
         <div class="input-group">
-          <input type="password" placeholder="Confirm Password" required />
+          <input type="password" placeholder="Confirm Password" v-model="confirm_password" required />
         </div>
         <button type="submit" class="register-button">Register</button>
         <div class="additional-links">
@@ -24,14 +24,33 @@
   </div>
 </template>
 
-<script>
-export default {
-  methods: {
-    onRegister() {
-      // Handle registration logic here
-    },
-  },
-}
+<script setup>
+import { useAuthStore } from '@/stores/auth';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+  let username = ref(null);
+  let email = ref(null);
+  let password = ref(null);
+  let confirm_password = ref(null);
+  let err = ref(null);
+  const router = useRouter();
+  
+  let onRegister = async () => {
+            const authStore = useAuthStore();
+            try {
+                await authStore.register({
+                    username: username.value,
+                    email: email.value,
+                    password: password.value,
+                    password_confirm: confirm_password.value
+                })
+                router.push("/login");
+            } catch (error) {
+                err.value = error;
+            }
+        }
+
 </script>
 
 <style scoped>

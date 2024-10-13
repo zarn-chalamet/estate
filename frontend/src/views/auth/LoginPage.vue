@@ -4,10 +4,10 @@
       <h1 class="login-title">Welcome Back</h1>
       <form @submit.prevent="onLogin">
         <div class="input-group">
-          <input type="email" placeholder="Email" required />
+          <input type="email" placeholder="Email" v-model="email" />
         </div>
         <div class="input-group">
-          <input type="password" placeholder="Password" required />
+          <input type="password" placeholder="Password" v-model="password" required />
         </div>
         <button type="submit" class="login-button">Login</button>
         <div class="additional-links">
@@ -20,12 +20,32 @@
 </template>
 
 <script>
+import { useAuthStore } from '@/stores/auth';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
 export default {
-  methods: {
-    onLogin() {
-      // Handle login logic here
-    },
-  },
+  setup(){
+    const router = useRouter();
+    let email = ref(null);
+    let password = ref(null);
+    let err = ref(null);
+
+    let onLogin = async () => {
+      const authStore = useAuthStore();
+      try{
+          console.log(email.value,password.value)
+            await authStore.login({
+                email: email.value,
+                password: password.value
+            });
+            router.push('/');
+        }catch(error){
+            err.value = error;
+        }
+    }
+    return { onLogin,email,password}
+  }
 }
 </script>
 
