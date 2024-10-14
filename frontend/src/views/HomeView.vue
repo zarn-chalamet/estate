@@ -5,12 +5,16 @@ import MissionTopic from '@/components/MissionTopic.vue'
 import PropertyBox from '@/components/PropertyBox.vue'
 import { useAuthStore } from '@/stores/auth';
 import { onMounted, ref } from 'vue';
+import { usePropertyStore } from '@/stores/property';
 const authStore = useAuthStore();
 let user = ref(null);
+let properties = ref(null);
+const propertyStore = usePropertyStore();
 
 onMounted( async() => {
   await authStore.getUser();
         user.value = authStore.userDetail;
+  properties.value = await propertyStore.getProperties();
 })
 
 let logout = async () => {
@@ -23,6 +27,7 @@ let logout = async () => {
   <div>
     <div v-if="user && Object.keys(user).length > 0">
       <h3>Home</h3>
+      <p>{{ properties }}</p>
       <h4>Username: {{ user.username }}</h4>
       <h4>email: {{ user.email }}</h4>
       <button @click="logout">Logout</button>
