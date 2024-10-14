@@ -30,6 +30,7 @@ app.use(cookieParser());
 app.use(validateTokenHandler);
 
 app.use("/api/auth", require("./routes/user"));
+app.use("/api/properties", require("./routes/propertyRoute"));
 
 //error handeler
 app.use(errorHandler);
