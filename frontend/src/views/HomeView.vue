@@ -1,6 +1,7 @@
 <script setup>
 import { usePropertyStore } from '@/stores/property';
 import PropertyBox from '@/components/PropertyBox.vue';
+import MainNav from '@/components/MainNav.vue';
 import { onMounted, ref } from 'vue';
 
   let properties = ref(null);
@@ -13,7 +14,7 @@ import { onMounted, ref } from 'vue';
 <template>
   <div v-if="properties">
     <header>
-        <h3>This is header</h3>
+        <MainNav></MainNav>
     </header>
     <h1>Properties</h1>
     <div class="rent-list">
