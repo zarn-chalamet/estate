@@ -14,7 +14,7 @@ export const usePropertyStore = defineStore('property', {
         this.properties = data
         return data
       } catch (error) {
-        console.error('Error fetching blogs:', error.message)
+        console.error('Error fetching properties:', error.message)
         throw error
       }
     },
@@ -32,9 +32,41 @@ export const usePropertyStore = defineStore('property', {
     },
 
     //get property by id
+    async getProperty(id) {
+      try {
+        const { data } = await useApi().get(`/api/properties/${id}`)
+        this.property = data
+        return data
+      } catch (error) {
+        console.error('Error fetching property:', error.message)
+        throw error
+      }
+    },
 
     //update property
+    async updateProperty(id, payload) {
+      try {
+        const { data } = await useApi().put(`/api/properties/${id}`, payload)
+        const index = this.properties.findIndex(property => property._id === id)
+        if (index !== -1) {
+          this.properties.splice(index, 1, data)
+        }
+        return data
+      } catch (error) {
+        console.error('Error updating property:', error.message)
+        throw error
+      }
+    },
 
     //delete propery
+    async deleteProperty(id) {
+      try {
+        await useApi().delete(`/api/properties/${id}`)
+        this.properties = this.properties(property => property._id !== id)
+      } catch (error) {
+        console.error('Error deleting property:', error.message)
+        throw error
+      }
+    },
   },
 })

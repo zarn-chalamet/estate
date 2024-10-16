@@ -1,16 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import LoginPage from '@/views/auth/LoginPage.vue'
 import RegisterPage from '@/views/auth/RegisterPage.vue'
 import CreateProperty from '@/views/CreateProperty.vue'
+import WelcomeView from '../views/WelcomeView.vue'
+import HomeView from '@/views/HomeView.vue'
+import PropertyDetails from '@/views/PropertyDetails.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
+      name: 'Welcome',
+      component: WelcomeView,
     },
     {
       path: '/login',
@@ -26,6 +28,17 @@ const router = createRouter({
       path: '/create-property',
       name: 'CreateProperty',
       component: CreateProperty,
+    },
+    {
+      path: '/home',
+      name: 'Home',
+      component: HomeView,
+    },
+    {
+      path: '/properties/:id',
+      name: 'PropertyDetails',
+      component: PropertyDetails,
+      props: true,
     },
   ],
 })
