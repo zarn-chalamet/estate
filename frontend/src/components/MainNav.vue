@@ -11,7 +11,9 @@
       </button>
       </router-link>
       <button class="icon-button" title="Favorites">
-        <i class="material-icons-outlined">favorite</i>
+        <i class="material-icons-outlined">
+          favorite
+        </i>
       </button>
       <button class="icon-button" title="Cart">
         <i class="material-icons-outlined">shopping_cart</i>

@@ -1,6 +1,8 @@
 <script setup>
 import { usePropertyStore } from '@/stores/property';
 import { ref } from 'vue';
+import UploadPhotos from '@/components/UploadPhotos.vue';
+import storeDataToDatabase from '@/composables/photoToDb';
 
   const propertyStore = usePropertyStore();
 
@@ -33,8 +35,26 @@ import { ref } from 'vue';
       },)
     const amenities = ['Swimming Pool', 'Gym', 'Garden', 'Parking', 'Elevator', 'Security'];
 
+
+    let {uploadFile} = storeDataToDatabase();
+
+
+
+    //upload photo
+
+    let images = ref(null);
+
+    let selectedImages = (selectedImages) => {
+      images.value = selectedImages;
+    }
+
     let submitProperty = async () => {
       try {
+        let downloadUrl = await uploadFile(images.value[0].realFile);
+        console.log(downloadUrl);
+        property.value.images.push(downloadUrl);
+        property.value.images.push(downloadUrl);
+        property.value.images.push(downloadUrl);
         await propertyStore.createProperty(property.value);
         alert("created successfully!");
       } catch (error) {
@@ -50,6 +70,8 @@ import { ref } from 'vue';
         property.value.amenities.push(amenity);
       }
     }
+
+    
 </script>
 
 <template>
@@ -175,9 +197,7 @@ import { ref } from 'vue';
   
         <!-- Property Images -->
         <h3>Images</h3>
-        <div>
-          <input type="file" @change="handleImageUpload" multiple />
-        </div>
+        <UploadPhotos @selectedImages="selectedImages"></UploadPhotos>
   
         <!-- Submit Button -->
         <button type="submit">Create Property</button>
@@ -210,6 +230,7 @@ import { ref } from 'vue';
   display: block;
   width: 100%;
   padding: 10px;
+  margin-top: 30px;
   background-color: #007BFF;
   color: #fff;
   border: none;

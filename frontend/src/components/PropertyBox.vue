@@ -39,7 +39,11 @@
     </router-link>
 
     <!-- Save button outside of the router-link -->
-    <button class="save-btn" @click="handleSaveClick">Save</button>
+    <button class="save-btn" @click="handleSaveClick">
+      <i class="material-icons-outlined">
+        favorite
+      </i>
+    </button>
   </div>
 </template>
 
@@ -93,11 +97,10 @@ const handleSaveClick = () => {
   position: absolute;
   top: 10px;
   right: 10px;
-  background-color: blue;
-  padding: 5px 10px;
+  background-color: transparent;
   color: white;
   border: none;
-  border-radius: 10px;
+  cursor: pointer;
 }
 
 .property-details {
