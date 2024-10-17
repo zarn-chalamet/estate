@@ -2,38 +2,27 @@
 import SearchTopic from '@/components/SearchTopic.vue'
 import PropertyTypeBox from '@/components/PropertyTypeBox.vue'
 import MissionTopic from '@/components/MissionTopic.vue'
-import { useAuthStore } from '@/stores/auth';
 import { onMounted, ref } from 'vue';
 import { usePropertyStore } from '@/stores/property';
 import PropertyBox from '@/components/PropertyBox.vue';
-const authStore = useAuthStore();
-let user = ref(null);
+
 let properties = ref(null);
 const propertyStore = usePropertyStore();
 
 onMounted( async() => {
-  await authStore.getUser();
-        user.value = authStore.userDetail;
   properties.value = await propertyStore.getProperties();
 })
 
-let logout = async () => {
-        await authStore.logout();
-        user.value = {};
-}
+
 </script>
 
 <template>
   <div>
-    <div v-if="user && Object.keys(user).length > 0">
-      <h3>Home</h3>
-      <p>{{ properties }}</p>
-      <h4>Username: {{ user.username }}</h4>
-      <h4>email: {{ user.email }}</h4>
-      <button @click="logout">Logout</button>
-    </div>
+    
+    
     <SearchTopic></SearchTopic>
     <div class="properties">
+      
       <h2>Explore Our Properties</h2>
       <p>Lorem ipsum dolor sit amet</p>
       <div class="property-list">

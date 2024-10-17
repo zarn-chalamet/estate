@@ -15,9 +15,26 @@
       </div>
 
       <div class="property-bottom">
-        <span>{{ property.features.bedrooms }} Bed</span>
-        <span>{{ property.features.bathrooms }} Bath</span>
-        <span>${{ property.price.toLocaleString() }}</span>
+
+        <div class="label">
+            <i class="material-icons-outlined">
+              bed
+            </i>
+            <span>
+              {{ property.features.bedrooms }}
+            </span>
+        </div>
+
+        <div class="label">
+            <i class="material-icons-outlined">
+              bathroom
+            </i>
+            <span>
+              {{ property.features.bathrooms }}
+            </span>          
+        </div>
+        
+        <span>฿{{ property.price.toLocaleString() }}</span>
       </div>
     </router-link>
 
@@ -69,6 +86,7 @@ const handleSaveClick = () => {
   display: block;
   text-decoration: none;
   color: inherit;
+  padding: 0px;
 }
 
 .save-btn {
@@ -101,5 +119,16 @@ h4 {
   justify-content: space-between;
   padding: 5px;
   font-weight: bold;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  font-size: 12px; /* Smaller text size */
+}
+
+.label i {
+  font-size: 18px; /* Adjust icon size */
+  margin-right: 3px; /* Space between icon and number */
 }
 </style>

@@ -1,5 +1,12 @@
 <template>
   <div class="search-div">
+    <div class="profile-icon-container">
+      <router-link :to="user ? {name:'Profile'} : {name:'Login'}">
+        
+        <i class="material-icons-outlined">account_circle</i>
+     
+      </router-link>
+    </div>
     <div class="content-wrapper">
       <h1>The #1 site real estate professionals trust*</h1>
       <h5>From as low as $10 per day with limited time offer discounts.</h5>
@@ -10,11 +17,15 @@
   </div>
 </template>
 
-<script>
+
+<script setup>
+import { onMounted, ref } from 'vue';
 import SearchBox from './SearchBox.vue'
-export default {
-  components: { SearchBox },
-}
+import { isLogin } from '@/composables/IsLogin';
+let user = ref(null);
+onMounted(async () => {
+  user.value = await isLogin();
+})
 </script>
 
 <style scoped>
@@ -32,8 +43,22 @@ export default {
   align-items: center;
   overflow: hidden;
 }
-.serach {
-  width: 75%;
+
+.profile-icon-container {
+  position: absolute; /* Position it absolutely within the search-div */
+  top: 20px; /* Distance from the top */
+  right: 20px; /* Distance from the right */
+  z-index: 10; /* Ensures it stays on top */
+}
+.profile-icon-container a{
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: grey;
+}
+
+.profile-icon-container i{
+  font-size: 40px;
 }
 
 .content-wrapper {
