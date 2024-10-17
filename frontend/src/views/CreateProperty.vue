@@ -50,11 +50,14 @@ import storeDataToDatabase from '@/composables/photoToDb';
 
     let submitProperty = async () => {
       try {
-        let downloadUrl = await uploadFile(images.value[0].realFile);
-        console.log(downloadUrl);
-        property.value.images.push(downloadUrl);
-        property.value.images.push(downloadUrl);
-        property.value.images.push(downloadUrl);
+        property.value.images = [];
+    
+        // Upload each image and store the download URL
+        for (let image of images.value) {
+          let downloadUrl = await uploadFile(image.realFile); // Upload each image
+          console.log(downloadUrl);
+          property.value.images.push(downloadUrl); // Push the download URL into the images array
+        }
         await propertyStore.createProperty(property.value);
         alert("created successfully!");
       } catch (error) {
