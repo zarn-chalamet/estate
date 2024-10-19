@@ -1,7 +1,20 @@
+<script setup>
+import { useSearchStore } from '@/stores/search';
+import { ref, watch } from 'vue';
+
+const searchQuery = ref(null);
+const searchStore = useSearchStore();
+watch(searchQuery,() => {
+  searchStore.setSearchQuery(searchQuery.value);
+})
+</script>
 <template>
     <div class="search-container">
       <i class="material-icons-outlined search-icon">search</i>
-      <input type="text" class="search-input" placeholder="Search">
+      <input 
+        v-model="searchQuery"
+        type="text" 
+        class="search-input" placeholder="Search">
     </div>
   </template>
   
