@@ -68,5 +68,25 @@ export const usePropertyStore = defineStore('property', {
         throw error
       }
     },
+
+    //toggle like
+    async toggleLike(id) {
+      try {
+        const { data } = await useApiPrivate().post(
+          `/api/properties/${id}/like`,
+        )
+        const porpertyIndex = this.properties.findIndex(
+          property => property._id === id,
+        )
+
+        if (porpertyIndex !== -1) {
+          this.properties[porpertyIndex].likes = data.likes
+        }
+        return data
+      } catch (error) {
+        console.error('Error toggling like:', error.message)
+        throw error
+      }
+    },
   },
 })

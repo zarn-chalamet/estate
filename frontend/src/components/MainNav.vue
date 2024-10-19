@@ -10,11 +10,13 @@
         <i class="material-icons-outlined">account_circle</i>
       </button>
       </router-link>
-      <button class="icon-button" title="Favorites">
-        <i class="material-icons-outlined">
-          favorite
-        </i>
-      </button>
+      <router-link :to="user ? {name:'WishList'} : {name:'Login'}">
+        <button class="icon-button" title="Favorites">
+          <i class="material-icons-outlined">
+            favorite
+          </i>
+        </button>
+      </router-link>
       <button class="icon-button" title="Cart">
         <i class="material-icons-outlined">shopping_cart</i>
       </button>

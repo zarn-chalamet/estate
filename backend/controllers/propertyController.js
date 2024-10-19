@@ -81,10 +81,35 @@ const deleteProperty = async (req, res) => {
   }
 };
 
+const toggleLike = async (req, res) => {
+  const property = await Property.findById(req.params.id);
+
+  if (!property) {
+    res.status(400);
+    throw new Error("Property not found");
+  }
+
+  const userAlredayLiked = property.likes.some(
+    (like) => like.userId.toString() === req.user.id
+  );
+
+  if (userAlredayLiked) {
+    property.likes = property.likes.filter(
+      (like) => like.userId.toString() !== req.user.id
+    );
+  } else {
+    property.likes.push({ userId: req.user.id });
+  }
+
+  await property.save();
+  res.status(200).json(property);
+};
+
 module.exports = {
   getProperties,
   createProperty,
   getProperty,
   updateProperty,
   deleteProperty,
+  toggleLike,
 };

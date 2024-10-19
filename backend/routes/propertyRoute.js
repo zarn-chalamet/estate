@@ -5,6 +5,7 @@ const {
   getProperty,
   updateProperty,
   deleteProperty,
+  toggleLike,
 } = require("../controllers/propertyController");
 const router = express.Router();
 const validateToken = require("../middleware/validateToken");
@@ -23,5 +24,7 @@ router.put("/:id", validateToken, updateProperty);
 
 //delete property (DELETE)
 router.delete("/:id", validateToken, deleteProperty);
+
+router.post("/:id/like", validateToken, toggleLike);
 
 module.exports = router;

@@ -39,7 +39,7 @@
     </router-link>
 
     <!-- Save button outside of the router-link -->
-    <button class="save-btn" @click="handleSaveClick">
+    <button class="save-btn" @click="handleSaveClick" :class="{liked: isLiked}">
       <i class="material-icons-outlined">
         favorite
       </i>
@@ -48,20 +48,48 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { isLogin } from '@/composables/IsLogin';
+import { usePropertyStore } from '@/stores/property';
+import { onMounted, ref } from 'vue';
 
-defineProps({
+const props = defineProps({
   property: {
     type: Object,
     required: true
   }
 });
 
+const emit = defineEmits(['updatedProperty']);
+
+let user = ref(null);
+let isLiked = ref(false);
+const propertyStore = usePropertyStore();
+onMounted( async () => {
+  user.value = await isLogin();
+  console.log(props.property.likes);
+  console.log(user.value)
+  
+  //for isLiked value
+  if(props.property.likes.some(like => like.userId === user.value._id)){
+    console.log("user has already like this blog");
+    isLiked.value = true;
+  }
+
+  console.log(isLiked.value)
+})
+
 const fallbackImage = ref("../assets/images/room.jpg");
 
-const handleSaveClick = () => {
-  // Handle save button logic here (e.g., save to favorites, API call, etc.)
-  console.log("Save button clicked");
+const handleSaveClick = async () => {
+  try {
+    await propertyStore.toggleLike(props.property._id);
+    isLiked.value = !isLiked.value;
+
+    emit('updatedProperty',props.property);
+    
+  } catch (error) {
+    console.error('Error liking property:', error.message);
+  }
 };
 </script>
 
@@ -101,6 +129,11 @@ const handleSaveClick = () => {
   color: white;
   border: none;
   cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.save-btn.liked{
+  color: yellow;
 }
 
 .property-details {

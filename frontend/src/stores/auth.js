@@ -5,7 +5,7 @@ export const useAuthStore = defineStore('auth', {
   state: () => {
     return {
       user: {},
-      accessToken: '',
+      accessToken: localStorage.getItem('token') || '',
       authReady: false,
     }
   },
@@ -18,7 +18,10 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async attempt() {
       try {
-        await this.refresh()
+        if (!this.accessToken) {
+          // If there's no token, try to refresh it
+          await this.refresh()
+        }
         await this.getUser()
       } catch (error) {
         return error
@@ -77,6 +80,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         const { data } = await useApi().post(`/api/auth/refresh`)
         this.accessToken = data.access_token
+        localStorage.setItem('token', data.access_token)
         return data
       } catch (error) {
         throw error.message

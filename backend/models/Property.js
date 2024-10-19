@@ -103,14 +103,14 @@ const PropertySchema = new Schema(
     availabilityDate: {
       type: Date,
     },
-    // likes: [
-    //   {
-    //     userId: {
-    //       type: mongoose.Schema.Types.ObjectId,
-    //       ref: "User",
-    //     },
-    //   },
-    // ],
+    likes: [
+      {
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+      },
+    ],
     // comments: [
     //   {
     //     userId: {
