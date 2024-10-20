@@ -46,7 +46,10 @@ export const usePropertyStore = defineStore('property', {
     //update property
     async updateProperty(id, payload) {
       try {
-        const { data } = await useApi().put(`/api/properties/${id}`, payload)
+        const { data } = await useApiPrivate().put(
+          `/api/properties/${id}`,
+          payload,
+        )
         const index = this.properties.findIndex(property => property._id === id)
         if (index !== -1) {
           this.properties.splice(index, 1, data)
@@ -61,8 +64,10 @@ export const usePropertyStore = defineStore('property', {
     //delete propery
     async deleteProperty(id) {
       try {
-        await useApi().delete(`/api/properties/${id}`)
-        this.properties = this.properties(property => property._id !== id)
+        await useApiPrivate().delete(`/api/properties/${id}`)
+        this.properties = this.properties.filter(
+          property => property._id !== id,
+        )
       } catch (error) {
         console.error('Error deleting property:', error.message)
         throw error

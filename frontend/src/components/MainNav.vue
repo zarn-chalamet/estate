@@ -1,7 +1,9 @@
 <template>
   <nav class="navbar">
     <div>
-      <h3 class="logo">ESTATE</h3>
+      <router-link to="/home">
+        <h3 class="logo">ESTATE</h3>
+      </router-link>
     </div>
     <SearchFunction></SearchFunction>
     <div class="nav-icons">

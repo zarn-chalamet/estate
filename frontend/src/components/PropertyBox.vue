@@ -39,16 +39,36 @@
     </router-link>
 
     <!-- Save button outside of the router-link -->
-    <button class="save-btn" @click="handleSaveClick" :class="{liked: isLiked}">
-      <i class="material-icons-outlined">
-        favorite
-      </i>
-    </button>
+    <div v-if="owner">
+      <button class="save-btn" @click="showModals = !showModals">
+        <i class="material-icons-outlined">
+          more_vert
+        </i>
+      </button>
+      <div v-if="showModals" class="modal-container">
+        <div class="modal">
+          <router-link :to="{ name: 'UpdateProperty', params: { id: property._id } }">
+            <button>Update</button>
+          </router-link>
+        </div>
+        <div class="modal">
+          <button @click="deletePropertyBox">Delete</button>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <button class="save-btn" @click="handleSaveClick" :class="{liked: isLiked}">
+        <i class="material-icons-outlined">
+          favorite
+        </i>
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { isLogin } from '@/composables/IsLogin';
+import router from '@/router';
 import { usePropertyStore } from '@/stores/property';
 import { onMounted, ref } from 'vue';
 
@@ -56,13 +76,19 @@ const props = defineProps({
   property: {
     type: Object,
     required: true
+  },
+  owner:{
+    type: Boolean,
+    required: true
   }
 });
 
-const emit = defineEmits(['updatedProperty']);
+
+const emit = defineEmits(['updatedProperty','deletedProperty']);
 
 let user = ref(null);
 let isLiked = ref(false);
+let showModals = ref(false);
 const propertyStore = usePropertyStore();
 onMounted( async () => {
   user.value = await isLogin();
@@ -91,6 +117,12 @@ const handleSaveClick = async () => {
     console.error('Error liking property:', error.message);
   }
 };
+
+const deletePropertyBox = async () => {
+  await propertyStore.deleteProperty(props.property._id);
+  router.push('/profile');
+  emit('deletedProperty',props.property._id);
+}
 </script>
 
 <style>
@@ -166,5 +198,25 @@ h4 {
 .label i {
   font-size: 18px; /* Adjust icon size */
   margin-right: 3px; /* Space between icon and number */
+}
+
+
+.modal-container {
+  position: absolute;
+  top: 20px;
+  right: -70px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.modal:last-child {
+  border-bottom: none; /* Remove border for last item */
 }
 </style>

@@ -7,6 +7,7 @@ import HomeView from '@/views/HomeView.vue'
 import PropertyDetails from '@/views/PropertyDetails.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import WishList from '@/views/WishList.vue'
+import UpdateProperty from '@/views/UpdateProperty.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -51,6 +52,12 @@ const router = createRouter({
       path: '/wishlist',
       name: 'WishList',
       component: WishList,
+    },
+    {
+      path: '/update/:id',
+      name: 'UpdateProperty',
+      component: UpdateProperty,
+      props: true,
     },
   ],
 })

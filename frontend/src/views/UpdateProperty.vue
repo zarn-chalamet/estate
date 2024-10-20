@@ -1,88 +1,7 @@
-<script setup>
-import { usePropertyStore } from '@/stores/property';
-import { ref } from 'vue';
-import UploadPhotos from '@/components/UploadPhotos.vue';
-import storeDataToDatabase from '@/composables/photoToDb';
-import router from '@/router';
-
-  const propertyStore = usePropertyStore();
-
-  let property = ref({
-        title: '',
-        description: '',
-        price: 0,
-        propertyType: 'apartment',
-        status: 'available',
-        location: {
-          address: '',
-          city: '',
-          state: '',
-          postalCode: '',
-          country: '',
-          latitude: 0,
-          longitude: 0,
-        },
-        features: {
-          bedrooms: 1,
-          bathrooms: 1,
-          area: 0,
-          parkingSpaces: 0,
-          furnished: false,
-          petsAllowed: false,
-          yearBuilt: 2022,
-        },
-        amenities: [],
-        images: [],
-      },)
-    const amenities = ['Swimming Pool', 'Gym', 'Garden', 'Parking', 'Elevator', 'Security'];
-
-
-    let {uploadFile} = storeDataToDatabase();
-
-
-
-    //upload photo
-
-    let images = ref(null);
-
-    let selectedImages = (selectedImages) => {
-      images.value = selectedImages;
-    }
-
-    let submitProperty = async () => {
-      try {
-        property.value.images = [];
-    
-        // Upload each image and store the download URL
-        for (let image of images.value) {
-          let downloadUrl = await uploadFile(image.realFile); // Upload each image
-          console.log(downloadUrl);
-          property.value.images.push(downloadUrl); // Push the download URL into the images array
-        }
-        await propertyStore.createProperty(property.value);
-        alert("created successfully!");
-        router.push("/home");
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    let toggleAmenity = (amenity) => {
-      const index = property.value.amenities.indexOf(amenity);
-      if (index > -1) {
-        property.value.amenities.splice(index, 1);
-      } else {
-        property.value.amenities.push(amenity);
-      }
-    }
-
-    
-</script>
-
 <template>
-    <div class="create-property-form">
+    <div class="create-property-form" v-if="property">
       <h2>Create Property</h2>
-      <form @submit.prevent="submitProperty">
+      <form @submit.prevent="updateProperty">
   
         <!-- Property Details -->
         <div>
@@ -195,20 +114,53 @@ import router from '@/router';
   
         <!-- Property Amenities -->
         <h3>Amenities</h3>
-        <div v-for="(amenity, index) in amenities" :key="index">
-          <input type="checkbox" :value="amenity" @change="toggleAmenity(amenity)" />
+        <div v-for="(amenity, index) in availableAmenities" :key="index">
+          <input 
+            type="checkbox"
+            :value="amenity" 
+            v-model="property.amenities" />
           <label>{{ amenity }}</label>
         </div>
   
         <!-- Property Images -->
-        <h3>Images</h3>
-        <UploadPhotos @selectedImages="selectedImages"></UploadPhotos>
+        <!-- <h3>Images</h3>
+        <UploadPhotos @selectedImages="selectedImages"></UploadPhotos> -->
   
         <!-- Submit Button -->
-        <button type="submit">Create Property</button>
+        <button type="submit">Update Property</button>
       </form>
     </div>
 </template>
+
+<script>
+import router from '@/router';
+import { usePropertyStore } from '@/stores/property';
+import { ref } from 'vue';
+import { onMounted } from 'vue';
+
+export default {
+    props: ['id'],
+    setup(props){
+
+        const availableAmenities = ['Swimming Pool', 'Gym', 'Garden', 'Parking', 'Elevator', 'Security'];
+
+        let property = ref(null);
+        const propertyStore = usePropertyStore();
+
+        onMounted(async () =>{
+            property.value = await propertyStore.getProperty(props.id);
+        })
+
+        let updateProperty = async () => {
+            console.log(property.value)
+            await propertyStore.updateProperty(props.id,property.value)
+            alert("updated properly!");
+            router.push("/home");
+        }
+        return { property, availableAmenities, updateProperty }
+    }
+}
+</script>
 
 <style>
 .create-property-form {
