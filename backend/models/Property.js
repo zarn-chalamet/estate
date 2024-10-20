@@ -111,23 +111,23 @@ const PropertySchema = new Schema(
         },
       },
     ],
-    // comments: [
-    //   {
-    //     userId: {
-    //       type: mongoose.Schema.Types.ObjectId,
-    //       ref: "User",
-    //       required: true,
-    //     },
-    //     comment: {
-    //       type: String,
-    //       required: true,
-    //     },
-    //     timestamp: {
-    //       type: Date,
-    //       default: Date.now,
-    //     },
-    //   },
-    // ],
+    comments: [
+      {
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        comment: {
+          type: String,
+          required: true,
+        },
+        timestamp: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

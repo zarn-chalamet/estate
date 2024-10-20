@@ -93,5 +93,25 @@ export const usePropertyStore = defineStore('property', {
         throw error
       }
     },
+
+    async addComment(id, comment) {
+      try {
+        const { data } = await useApiPrivate().post(
+          `/api/properties/${id}/comment`,
+          { comment },
+        )
+
+        const propertyIndex = this.properties.findIndex(
+          property => property._id === id,
+        )
+        if (propertyIndex !== -1) {
+          this.properties[propertyIndex].comments.push(data)
+        }
+        return data
+      } catch (error) {
+        console.error('Error adding comment:', error.message)
+        throw error
+      }
+    },
   },
 })

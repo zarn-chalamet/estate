@@ -86,5 +86,16 @@ export const useAuthStore = defineStore('auth', {
         throw error.message
       }
     },
+
+    async getUserById(id) {
+      try {
+        const { data } = await useApi().get(`/api/auth/${id}`)
+        console.log('fetch from api')
+        console.log(data)
+        return data
+      } catch (error) {
+        throw error.message
+      }
+    },
   },
 })

@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h3>Profile</h3>
+    <header>
+      <MainNav></MainNav>
+    </header>
     <div v-if=user>
       <h4>Username: {{ user.username }}</h4>
       <h4>email: {{ user.email }}</h4>
@@ -17,6 +19,7 @@
 </template>
 
 <script setup>
+import MainNav from '@/components/MainNav.vue';
 import { isLogin } from '@/composables/IsLogin';
 import router from '@/router';
 import { useAuthStore } from '@/stores/auth';

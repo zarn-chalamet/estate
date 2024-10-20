@@ -147,4 +147,17 @@ async function user(req, res) {
   return res.status(200).json(user);
 }
 
-module.exports = { register, login, logout, refresh, user };
+async function getUserById(req, res) {
+  const userId = req.params.id;
+
+  const user = await User.findById(userId);
+  if (!user) {
+    res.status(400);
+    throw new Error("User data is not valid");
+  }
+  res
+    .status(200)
+    .json({ _id: user._id, email: user.email, username: user.username });
+}
+
+module.exports = { register, login, logout, refresh, user, getUserById };

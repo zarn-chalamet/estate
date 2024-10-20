@@ -105,6 +105,25 @@ const toggleLike = async (req, res) => {
   res.status(200).json(property);
 };
 
+const addComment = async (req, res) => {
+  const { comment } = req.body;
+
+  if (!comment) {
+    res.status(400);
+    throw new Error("Comment can't be empty");
+  }
+
+  const property = await Property.findById(req.params.id);
+  if (!property) {
+    res.status(400);
+    throw new Error("Property not found");
+  }
+  property.comments.push({ userId: req.user.id, comment });
+  await property.save();
+
+  res.status(200).json(property);
+};
+
 module.exports = {
   getProperties,
   createProperty,
@@ -112,4 +131,5 @@ module.exports = {
   updateProperty,
   deleteProperty,
   toggleLike,
+  addComment,
 };

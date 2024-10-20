@@ -14,7 +14,7 @@ watch(searchQuery,() => {
       <input 
         v-model="searchQuery"
         type="text" 
-        class="search-input" placeholder="Search">
+        class="search-input" placeholder="Search by City">
     </div>
   </template>
   
