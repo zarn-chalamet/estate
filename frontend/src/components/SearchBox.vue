@@ -1,16 +1,44 @@
 <template>
   <div class="search-bar">
-    <select class="search-select">
-      <option value="">Type</option>
+    <select class="search-select" v-model="pType">
+      <option value="apartment">Apartment</option>
+      <option value="dormitory">Dormitory</option>
+      <option value="bangalo">Bangalo</option>
+      <option value="house">2 Storey House</option>
+      <option value="homestay">Home Stay</option>
     </select>
-    <input type="text" class="search-input" placeholder="Enter Keywords" />
-    <button class="search-filters">Filters</button>
-    <button class="search-button">Search</button>
+    <input type="text" class="search-input" placeholder="Enter City" v-model="searchKeyword"/>
+    <!-- <button class="search-filters">Filters</button> -->
+    <button class="search-button" @click="submitButton">Search</button>
   </div>
 </template>
 
 <script>
-export default {}
+import { useFilterByType } from '@/stores/filterByType';
+import { useSearchStore } from '@/stores/search';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+export default {
+  setup(){
+    let pType = ref(null);
+    let searchKeyword = ref(null);
+
+    const router = useRouter();
+
+    const searchStore = useSearchStore();
+    const filterByType = useFilterByType();
+    let submitButton = () => {
+      if(pType && searchKeyword){
+        searchStore.setSearchQuery(searchKeyword.value);
+        filterByType.setPropertyType(pType.value);
+
+        router.push("/home")
+      }
+    }
+    return { submitButton,searchKeyword,pType}
+  }
+}
 </script>
 
 <style>

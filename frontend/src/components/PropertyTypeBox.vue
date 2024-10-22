@@ -1,21 +1,36 @@
 <template>
-  <div class="property-box">
-    <div class="property-info">
-      <h4>Property Title</h4>
-      <p>Short description of the property.</p>
+  
+    <div @click="goToHome" class="property-box" :style="{ backgroundImage: `url(${propertyType.imgUrl})` }">
+      <div class="property-info">
+        <h4>{{propertyType.type}}</h4>
+        <p>{{propertyType.description}}</p>
+      </div>
     </div>
-  </div>
+
 </template>
 
 <script>
-export default {}
+import { useFilterByType } from '@/stores/filterByType';
+import { useRouter } from 'vue-router';
+
+export default{
+  props: ['propertyType'],
+  setup(props){
+    const router = useRouter();
+    const filterTypeStore = useFilterByType();
+    const goToHome = () => {
+      filterTypeStore.setPropertyType(props.propertyType.key);
+      router.push("/home");
+    }
+    return { goToHome };
+  }
+}
 </script>
 
 <style scoped>
 .property-box {
   width: 200px;
   height: 280px;
-  background: url('../assets/images/property1.png');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -23,14 +38,13 @@ export default {}
   overflow: hidden;
   position: relative;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .property-box:hover {
   transform: translateY(-10px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
 }
 
 .property-info {
