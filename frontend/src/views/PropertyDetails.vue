@@ -72,15 +72,21 @@
         </div>
       </div>
       <div class="section2">
-        <div v-if="property.comments">
+        <div class="comments-header">
+          <h3>Comments</h3>
+        </div>
+        <div class="comments-list">
           <ul>
-            <li v-for="comment in property.comments" :key="comment._id">
-              <strong>{{ userNamesMap[comment.userId]?.username || 'Unknown User' }}:</strong> {{ comment.comment }}
+            <li v-for="comment in property.comments" :key="comment._id" class="comment-item">
+              <div class="comment-user">
+                <strong>{{ userNamesMap[comment.userId]?.username || 'Unknown User' }}:</strong>
+              </div>
+              <div class="comment-text">{{ comment.comment }}</div>
             </li>
           </ul>
         </div>
         <div class="input-box">
-          <input type="text" v-model="newComment" placeholder="Write a comment">
+          <input type="text" v-model="newComment" placeholder="Write a comment" />
           <button @click="addComment">Send</button>
         </div>
       </div>
@@ -286,5 +292,67 @@ input{
   cursor: pointer;
 }
 
+.section2 {
+  min-width: 300px;
+  max-width: 600px;
+  margin-left: 20px; /* Optional: Adjust margin as needed */
+}
 
+.comments-header {
+  margin-bottom: 15px;
+}
+
+.comments-list {
+  max-height: 300px; /* Set a max height for the comments list */
+  overflow-y: auto; /* Enable scrolling if the content exceeds max height */
+  margin-bottom: 20px;
+  border: 1px solid #ddd; /* Add border for the comments section */
+  border-radius: 8px;
+  background-color: #f9f9f9; /* Light background for comments */
+  padding: 10px;
+}
+
+.comment-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee; /* Separator between comments */
+}
+
+.comment-item:last-child {
+  border-bottom: none; /* Remove the bottom border for the last comment */
+}
+
+.comment-user {
+  font-weight: bold;
+  color: #333; /* Darker color for the user name */
+}
+
+.comment-text {
+  margin-top: 5px;
+  color: #555; /* Softer color for the comment text */
+}
+
+.input-box {
+  display: flex;
+  justify-content: space-between;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid rgb(174, 183, 185);
+  border-radius: 5px;
+  width: 80%; /* Adjust input width */
+}
+
+input::placeholder {
+  color: #aaa; /* Lighter color for the placeholder */
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  color: black;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
 </style>
