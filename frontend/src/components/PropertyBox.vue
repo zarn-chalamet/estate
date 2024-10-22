@@ -90,6 +90,7 @@ let user = ref(null);
 let isLiked = ref(false);
 let showModals = ref(false);
 const propertyStore = usePropertyStore();
+
 onMounted( async () => {
   user.value = await isLogin();
   console.log(props.property.likes);

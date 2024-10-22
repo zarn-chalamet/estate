@@ -4,6 +4,27 @@
     <div class="property-images">
       <img v-for="(image, index) in property.images" :key="index" :src="image" alt="Property Image" />
     </div>
+    <div class="btn-section">
+      <button @click="handleSaveClick" :class="{liked: isLiked}">
+        <i class="material-icons-outlined">
+          favorite
+        </i>
+      </button>
+      <button @click="showShareModal= true">
+        <i class="material-icons-outlined">
+          share
+        </i>
+      </button>
+    </div>
+
+    <div class="modal" v-if="showShareModal">
+      <div class="modal-content">
+        <span class="close" @click="showShareModal = false">&times;</span>
+        <h3>Share this property</h3>
+        <p>Link: <a :href="propertyLink" target="_blank">{{ propertyLink }}</a></p>
+        <button @click="copyLink">Copy Link</button>
+      </div>
+    </div>
 
     <div class="section">
       <div class="section1">
@@ -68,6 +89,7 @@
 </template>
 
 <script>
+import { isLogin } from '@/composables/IsLogin';
 import { useAuthStore } from '@/stores/auth';
 import { usePropertyStore } from '@/stores/property';
 import { onMounted, ref } from 'vue';
@@ -80,8 +102,13 @@ export default {
     let newComment = ref(null);
     const userNamesMap = ref({});
     const authStore = useAuthStore();
+    let isLiked = ref(false);
+    let showShareModal = ref(false);
+    const propertyLink = `http://localhost:5173/properties/${props.id}`;
 
     onMounted(async () => {
+      const user = await isLogin();
+      console.log(user);
       property.value = await propertyStore.getProperty(props.id);
       console.log(property.value);
 
@@ -90,6 +117,10 @@ export default {
       for(const userId of userIdSet){
         console.log(userId)
         userNamesMap.value[userId] = await authStore.getUserById(userId)
+      }
+
+      if(property.value.likes.some(like => like.userId === user._id)){
+        isLiked.value = true;
       }
     });
 
@@ -106,7 +137,22 @@ export default {
       }
     }
 
-    return { property, newComment,addComment, userNamesMap };
+    const handleSaveClick = async () => {
+      try {
+        await propertyStore.toggleLike(property.value._id);
+        isLiked.value = !isLiked.value;
+      } catch (error) {
+        console.error('Error liking property:', error.message);
+      }
+    };
+
+    const copyLink = () => {
+      navigator.clipboard.writeText(propertyLink).then(()=>{
+        alert("Link copied to clipboard!");
+      })
+    }
+
+    return { property, newComment,addComment, userNamesMap, isLiked, handleSaveClick,propertyLink,showShareModal, copyLink };
   }
 };
 </script>
@@ -192,5 +238,53 @@ input{
   border-radius: 5px;
   width: 100%;
 }
+.btn-section{
+  margin-right: 0px;
+  margin-left: 80%;
+}
+
+.btn-section button{
+  border: 0.5px solid grey;
+  background-color: transparent;
+  padding: 8px;
+  margin-right: 4px;
+  border-radius: 3px;
+}
+.btn-section button :hover{
+  color: rgb(152, 207, 232);
+}
+.liked{
+  color: red;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
 
 </style>
