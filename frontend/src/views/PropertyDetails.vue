@@ -15,6 +15,9 @@
           share
         </i>
       </button>
+      <button @click="showRequestTourModal = true">
+        Request a tour
+      </button>
     </div>
 
     <div class="modal" v-if="showShareModal">
@@ -23,6 +26,28 @@
         <h3>Share this property</h3>
         <p>Link: <a :href="propertyLink" target="_blank">{{ propertyLink }}</a></p>
         <button @click="copyLink">Copy Link</button>
+      </div>
+    </div>
+
+    <div class="modal" v-if="showRequestTourModal">
+      <div class="modal-content">
+        <span class="close" @click="showRequestTourModal = false">&times;</span>
+        <h3>Request a Tour</h3>
+        <form @submit.prevent="submitRequest">
+          <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" v-model="tourRequest.name" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" v-model="tourRequest.email" required />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" v-model="tourRequest.phone" required />
+          </div>
+          <button type="submit">Submit Request</button>
+        </form>
       </div>
     </div>
 
@@ -110,7 +135,14 @@ export default {
     const authStore = useAuthStore();
     let isLiked = ref(false);
     let showShareModal = ref(false);
+    let showRequestTourModal = ref(false);
     const propertyLink = `http://localhost:5173/properties/${props.id}`;
+
+    const tourRequest = ref({
+      name: '',
+      email: '',
+      phone: '',
+    });
 
     onMounted(async () => {
       const user = await isLogin();
@@ -158,7 +190,17 @@ export default {
       })
     }
 
-    return { property, newComment,addComment, userNamesMap, isLiked, handleSaveClick,propertyLink,showShareModal, copyLink };
+    const submitRequest = () => {
+      // Here, you would handle the form submission logic
+      // console.log('Tour request submitted:', tourRequest.value);
+      
+      // // Clear the form after submission
+      // tourRequest.value = { name: '', email: '', phone: '' };
+      // showRequestTourModal.value = false; // Close the modal
+      alert('Your request has been submitted!'); // Optional alert for user feedback
+    };
+
+    return { property, newComment,addComment, userNamesMap, isLiked, handleSaveClick,propertyLink,showShareModal, copyLink,tourRequest, showRequestTourModal, submitRequest };
   }
 };
 </script>
