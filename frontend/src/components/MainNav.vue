@@ -2,7 +2,7 @@
   <nav class="navbar">
     <div>
       <router-link to="/home">
-        <h3 class="logo">ESTATE</h3>
+        <h3 class="logo" @click="$emit('reset-filters')">ESTATE</h3>
       </router-link>
     </div>
     <SearchFunction></SearchFunction>

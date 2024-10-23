@@ -21,7 +21,7 @@ import { useRouter } from 'vue-router';
 
 export default {
   setup(){
-    let pType = ref(null);
+    let pType = ref('apartment');
     let searchKeyword = ref(null);
 
     const router = useRouter();

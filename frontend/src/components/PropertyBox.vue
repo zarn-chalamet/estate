@@ -220,4 +220,7 @@ h4 {
 .modal:last-child {
   border-bottom: none; /* Remove border for last item */
 }
+a{
+  background-color: transparent;
+}
 </style>
