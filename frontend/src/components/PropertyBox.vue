@@ -127,6 +127,9 @@ const deletePropertyBox = async () => {
 </script>
 
 <style>
+a:hover{
+  background-color: transparent;
+}
 .property {
   position: relative;
   background-color: rgb(206, 207, 209);
@@ -219,8 +222,5 @@ h4 {
 
 .modal:last-child {
   border-bottom: none; /* Remove border for last item */
-}
-a{
-  background-color: transparent;
 }
 </style>

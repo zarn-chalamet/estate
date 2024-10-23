@@ -18,7 +18,7 @@ const PropertySchema = new Schema(
     },
     propertyType: {
       type: String,
-      enum: ["apartment", "house", "commercial", "land"],
+      enum: ["apartment", "dormitory", "bangalo", "house", "homestay"],
       required: true,
     },
     status: {

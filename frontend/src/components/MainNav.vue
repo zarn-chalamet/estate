@@ -82,4 +82,7 @@ onMounted(async () => {
   outline: none;
   transform: scale(1.1);
 }
+a{
+  background-color: transparent;
+}
 </style>

@@ -104,9 +104,10 @@ import router from '@/router';
           <label for="propertyType">Property Type</label>
           <select v-model="property.propertyType" required>
             <option value="apartment">Apartment</option>
-            <option value="house">House</option>
-            <option value="commercial">Commercial</option>
-            <option value="land">Land</option>
+            <option value="dormitory">Dormitory</option>
+            <option value="bangalo">Bangalo</option>
+            <option value="house">2 Storey House</option>
+            <option value="homestay">Home Stay</option>
           </select>
         </div>
 
