@@ -6,6 +6,9 @@
     <div v-if=user>
       <h4>Username: {{ user.username }}</h4>
       <h4>email: {{ user.email }}</h4>
+      <router-link to="/create-property">
+        <button>Create Property</button>
+      </router-link>
       <button @click="logout">Logout</button>
     </div>
     <div>
